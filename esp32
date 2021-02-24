@@ -1,11 +1,97 @@
-include <WiFi.h>
+// Constant Variables
+const int button1Pin = 34;
+const int button2Pin = 35;
+const int exitbutton1Pin = 32;
+const int exitbutton2Pin = 33;
+
+// Changing Variables
+int button1Pushcounter = 0;
+int button2Pushcounter = 0;
+int exitbutton1Pushcounter = 0;
+int exitbutton2Pushcounter = 0;
+
+int button1State = 0;
+int button2State = 0;
+int exitbutton1State = 0;
+int exitbutton2State = 0;
+
+int previousbutton1State = 0;
+int previousbutton2State = 0;
+int previousexitbutton1State = 0;
+int previousexitbutton2State = 0;
+
+char input = Serial.read();
 
 void setup() {
   // put your setup code here, to run once:
 
+  // Setting pins as input
+  pinMode(button1Pin, INPUT);
+  pinMode(button2Pin, INPUT);
+  pinMode(exitbutton1Pin, INPUT);
+  pinMode(exitbutton2Pin, INPUT);
+
+  Serial.begin(115200); // Baud Rate 115200
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  button1State = digitalRead(button1Pin);
+  button2State = digitalRead(button2Pin);
+  exitbutton1State = digitalRead(exitbutton1Pin);
+  exitbutton2State = digitalRead(exitbutton2Pin);
 
+  // Counter for Button 1
+  if(button1State != previousbutton1State){
+    if(button1State == HIGH){
+      button1Pushcounter++;
+
+      }
+     delay(1000);
+     input = 'A';
+    }
+
+  // Counter for Button 2
+  if(button2State != previousbutton2State){
+    if(button2State == HIGH){
+      button2Pushcounter++;
+      }
+     delay(1000);
+     input = 'A';
+    }
+
+  // Counter for Exit Button 1
+  if(exitbutton1State != previousexitbutton1State){
+    if(exitbutton1State == HIGH){
+      exitbutton1Pushcounter++;
+      }
+     delay(1000);
+     input = 'A';
+    }
+    
+  // Counter for Exit Button 2
+  if(exitbutton2State != previousexitbutton2State){
+    if(exitbutton2State == HIGH){
+      exitbutton2Pushcounter++;
+      }
+     delay(1000);
+     input = 'A';
+    }
+  
+  if(input == 'A'){
+  display();
+  }
 }
+
+
+void display(){
+  Serial.print("Number of People:");
+  Serial.println("Entrance 1");
+  Serial.println(button1Pushcounter);
+  Serial.println("Entrance 2");
+  Serial.println(button2Pushcounter);
+  Serial.println("Exit 1");
+  Serial.println(exitbutton1Pushcounter);
+  Serial.println("Exit 2");
+  Serial.println(exitbutton2Pushcounter);
+  }
