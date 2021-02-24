@@ -20,8 +20,6 @@ int previousbutton2State = 0;
 int previousexitbutton1State = 0;
 int previousexitbutton2State = 0;
 
-char input = Serial.read();
-
 void setup() {
   // put your setup code here, to run once:
 
@@ -45,10 +43,8 @@ void loop() {
   if(button1State != previousbutton1State){
     if(button1State == HIGH){
       button1Pushcounter++;
-
       }
      delay(1000);
-     input = 'A';
     }
 
   // Counter for Button 2
@@ -57,7 +53,6 @@ void loop() {
       button2Pushcounter++;
       }
      delay(1000);
-     input = 'A';
     }
 
   // Counter for Exit Button 1
@@ -66,7 +61,6 @@ void loop() {
       exitbutton1Pushcounter++;
       }
      delay(1000);
-     input = 'A';
     }
     
   // Counter for Exit Button 2
@@ -75,23 +69,8 @@ void loop() {
       exitbutton2Pushcounter++;
       }
      delay(1000);
-     input = 'A';
     }
-  
-  if(input == 'A'){
-  display();
+
   }
 }
 
-
-void display(){
-  Serial.print("Number of People:");
-  Serial.println("Entrance 1");
-  Serial.println(button1Pushcounter);
-  Serial.println("Entrance 2");
-  Serial.println(button2Pushcounter);
-  Serial.println("Exit 1");
-  Serial.println(exitbutton1Pushcounter);
-  Serial.println("Exit 2");
-  Serial.println(exitbutton2Pushcounter);
-  }
