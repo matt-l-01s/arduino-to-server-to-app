@@ -43,8 +43,7 @@ void loop() {
   if(button1State != previousbutton1State){
     if(button1State == HIGH){
       button1Pushcounter++;
-      }
-     delay(1000);
+      }  
     }
 
   // Counter for Button 2
@@ -52,7 +51,6 @@ void loop() {
     if(button2State == HIGH){
       button2Pushcounter++;
       }
-     delay(1000);
     }
 
   // Counter for Exit Button 1
@@ -60,7 +58,6 @@ void loop() {
     if(exitbutton1State == HIGH){
       exitbutton1Pushcounter++;
       }
-     delay(1000);
     }
     
   // Counter for Exit Button 2
@@ -68,9 +65,9 @@ void loop() {
     if(exitbutton2State == HIGH){
       exitbutton2Pushcounter++;
       }
-     delay(1000);
     }
 
   }
+  delay(500);
 }
 
