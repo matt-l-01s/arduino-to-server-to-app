@@ -1,0 +1,145 @@
+#include <SPI.h>
+#include <WiFi.h>
+#include <WiFiClient.h>
+
+// Constant Variables
+const int button1Pin = 34;
+const int button2Pin = 35;
+const int exitbutton1Pin = 32;
+const int exitbutton2Pin = 33;
+
+// Changing Variables
+int button1Pushcounter = 0;
+int button2Pushcounter = 0;
+int exitbutton1Pushcounter = 0;
+int exitbutton2Pushcounter = 0;
+
+int button1State = 0;
+int button2State = 0;
+int exitbutton1State = 0;
+int exitbutton2State = 0;
+
+int previousbutton1State = 0;
+int previousbutton2State = 0;
+int previousexitbutton1State = 0;
+int previousexitbutton2State = 0;
+
+int input = Serial.read();
+
+// Connect to wifi and server
+byte serverIP[] = { 180, 235, 234, 95 };
+int serverPort = 9005;
+char ssid[] = "Annchewce3-TIME2.4Ghz";       // My WiFi SSID
+char pass[] = "4QaPz5HC9";   // My WiFi Password
+char Header[] = { 0x1, 0x3, 'S', 'I', 'T',};
+
+WiFiClient client;
+
+void setup() {
+  // put your setup code here, to run once:
+
+  // Setting pins as input
+  pinMode(button1Pin, INPUT);
+  pinMode(button2Pin, INPUT);
+  pinMode(exitbutton1Pin, INPUT);
+  pinMode(exitbutton2Pin, INPUT);
+
+  Serial.begin(115200); // Baud Rate 115200
+
+  WiFi.begin(ssid, pass);
+  int TTL = 20;
+  Serial.println("Connecting to WiFi");
+  Serial.print("SSID: ");
+  Serial.println(ssid);
+  while( WiFi.status() != WL_CONNECTED && --TTL>=0) {
+    delay(500);
+    Serial.print(".");
+  }
+  if( WiFi.status() != WL_CONNECTED) {
+    Serial.println("\nCouldn't get a wifi connection");
+    return;
+  }
+  Serial.println("\nConnected to wifi with IP Address: ");
+  Serial.println(WiFi.localIP());
+
+  client.connect(serverIP, serverPort);
+  TTL = 20;
+  Serial.print("Connecting to Server");
+  delay(5000);
+  while( !client.connected() && --TTL>=0) {
+    client.connect(serverIP, serverPort);
+    delay(50000);
+    Serial.print(".");
+  }
+  if( !client.connected()) {
+    Serial.println("Couldn't get a Server connection");
+    return;
+  }
+  Serial.println("\nConnected to Server");
+  client.write(Header);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  button1State = digitalRead(button1Pin);
+  button2State = digitalRead(button2Pin);
+  exitbutton1State = digitalRead(exitbutton1Pin);
+  exitbutton2State = digitalRead(exitbutton2Pin);
+
+  // Counter for Button 1
+  if(button1State != previousbutton1State){
+    if(button1State == HIGH){
+      button1Pushcounter++;
+
+      }
+     input = 'A';
+    }
+
+  // Counter for Button 2
+  if(button2State != previousbutton2State){
+    if(button2State == HIGH){
+      button2Pushcounter++;
+      }
+     input = 'A';
+    }
+
+  // Counter for Exit Button 1
+  if(exitbutton1State != previousexitbutton1State){
+    if(exitbutton1State == HIGH){
+      exitbutton1Pushcounter++;
+      }
+     input = 'A';
+    }
+    
+  // Counter for Exit Button 2
+  if(exitbutton2State != previousexitbutton2State){
+    if(exitbutton2State == HIGH){
+      exitbutton2Pushcounter++;
+      }
+     input = 'A';
+    }
+  delay(500);
+  
+  if(input == 'A'){
+  display();
+  sendtoserver();
+  }
+  
+}
+
+
+void display(){
+  Serial.print(button1Pushcounter);
+  Serial.print(button2Pushcounter);
+  Serial.print(exitbutton1Pushcounter);
+  Serial.print(exitbutton2Pushcounter);
+  Serial.println();
+  }
+
+void sendtoserver(){
+  client.write(button1Pushcounter);
+  client.write(button2Pushcounter);
+  client.write(exitbutton1Pushcounter);
+  client.write(exitbutton2Pushcounter);
+  delay(500);
+  }
