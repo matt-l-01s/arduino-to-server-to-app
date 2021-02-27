@@ -29,8 +29,8 @@ int input = Serial.read();
 // Connect to wifi and server
 byte serverIP[] = { 180, 235, 234, 95 };
 int serverPort = 9005;
-char ssid[] = "Annchewce3-TIME2.4Ghz";       // My WiFi SSID
-char pass[] = "4QaPz5HC9";   // My WiFi Password
+char ssid[] = "";       // My WiFi SSID
+char pass[] = "";   // My WiFi Password
 char Header[] = { 0x1, 0x3, 'S', 'I', 'T',};
 
 WiFiClient client;
