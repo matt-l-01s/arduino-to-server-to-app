@@ -79,30 +79,45 @@ void setup() {
   client.write(Header);
 }
 
+//unit is milli seconds
+
+unsigned long button1Pushedtime = 0;
+unsigned long button2Pushedtime = 0;
+
+const unsigned long coolTime = 1000;
+
+
+long visitorNum = 0;
+
 void loop() {
   // put your main code here, to run repeatedly:
   button1State = digitalRead(button1Pin);
   button2State = digitalRead(button2Pin);
-  exitbutton1State = digitalRead(exitbutton1Pin);
-  exitbutton2State = digitalRead(exitbutton2Pin);
+  /exitbutton1State = digitalRead(exitbutton1Pin);
+  //exitbutton2State = digitalRead(exitbutton2Pin);
 
   // Counter for Button 1
-  if(button1State != previousbutton1State){
-    if(button1State == HIGH){
-      button1Pushcounter++;
-
-      }
-     input = 'A';
+  if(button1State == HIGH){
+    unsigned long nowTime = millis();
+    if(nowTime - button1Pushedtime > coolTime){
+      visitorNum++;
+      client.write(visitorNum);
+      Serial.println("send %l", visitorNum);
     }
+    button1Pushedtime = nowTime;
+  }
 
   // Counter for Button 2
-  if(button2State != previousbutton2State){
-    if(button2State == HIGH){
-      button2Pushcounter++;
-      }
-     input = 'A';
+  if(button2State == HIGH){
+    unsigned long nowTime = millis();
+    if(nowTime - button2Pushedtime > coolTime){
+      visitorNum--;
+      client.write(visitorNum);
+      Serial.println("send %l", visitorNum);
     }
-
+    button2Pushedtime = nowTime;
+  }
+/*
   // Counter for Exit Button 1
   if(exitbutton1State != previousexitbutton1State){
     if(exitbutton1State == HIGH){
@@ -118,16 +133,12 @@ void loop() {
       }
      input = 'A';
     }
-  delay(500);
-  
-  if(input == 'A'){
-  display();
-  sendtoserver();
-  }
+  */
+
   
 }
 
-
+/*
 void display(){
   Serial.print(button1Pushcounter);
   Serial.print(button2Pushcounter);
@@ -143,3 +154,4 @@ void sendtoserver(){
   client.write(exitbutton2Pushcounter);
   delay(500);
   }
+*/
