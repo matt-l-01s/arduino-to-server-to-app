@@ -5,32 +5,32 @@
 // Constant Variables
 const int button1Pin = 34;
 const int button2Pin = 35;
-const int exitbutton1Pin = 32;
-const int exitbutton2Pin = 33;
+//const int exitbutton1Pin = 32;
+//const int exitbutton2Pin = 33;
 
 // Changing Variables
 int button1Pushcounter = 0;
 int button2Pushcounter = 0;
-int exitbutton1Pushcounter = 0;
-int exitbutton2Pushcounter = 0;
+//int exitbutton1Pushcounter = 0;
+//int exitbutton2Pushcounter = 0;
 
 int button1State = 0;
 int button2State = 0;
-int exitbutton1State = 0;
-int exitbutton2State = 0;
+//int exitbutton1State = 0;
+//int exitbutton2State = 0;
 
 int previousbutton1State = 0;
 int previousbutton2State = 0;
-int previousexitbutton1State = 0;
-int previousexitbutton2State = 0;
+//int previousexitbutton1State = 0;
+//int previousexitbutton2State = 0;
 
 int input = Serial.read();
 
 // Connect to wifi and server
 byte serverIP[] = { 180, 235, 234, 95 };
 int serverPort = 9005;
-char ssid[] = "";       // My WiFi SSID
-char pass[] = "";   // My WiFi Password
+char ssid[] = "Annchewce3-TIME2.4Ghz";       // My WiFi SSID
+char pass[] = "4QaPz5HC9"; 
 char Header[] = { 0x1, 0x3, 'S', 'I', 'T',};
 
 WiFiClient client;
@@ -41,8 +41,8 @@ void setup() {
   // Setting pins as input
   pinMode(button1Pin, INPUT);
   pinMode(button2Pin, INPUT);
-  pinMode(exitbutton1Pin, INPUT);
-  pinMode(exitbutton2Pin, INPUT);
+  //pinMode(exitbutton1Pin, INPUT);
+  //pinMode(exitbutton2Pin, INPUT);
 
   Serial.begin(115200); // Baud Rate 115200
 
@@ -77,6 +77,8 @@ void setup() {
   }
   Serial.println("\nConnected to Server");
   client.write(Header);
+
+  client.write("Visitors In | Visitors Out");
 }
 
 //unit is milli seconds
@@ -86,37 +88,37 @@ unsigned long button2Pushedtime = 0;
 
 const unsigned long coolTime = 1000;
 
-
-long visitorNum = 0;
+byte visitorNum[2] = {0, 0};
 
 void loop() {
   // put your main code here, to run repeatedly:
   button1State = digitalRead(button1Pin);
   button2State = digitalRead(button2Pin);
-  /exitbutton1State = digitalRead(exitbutton1Pin);
+  //exitbutton1State = digitalRead(exitbutton1Pin);
   //exitbutton2State = digitalRead(exitbutton2Pin);
 
   // Counter for Button 1
   if(button1State == HIGH){
     unsigned long nowTime = millis();
     if(nowTime - button1Pushedtime > coolTime){
-      visitorNum++;
-      client.write(visitorNum);
-      Serial.println("send %l", visitorNum);
+      visitorNum[0]++;
+      button1Pushedtime = nowTime;
     }
-    button1Pushedtime = nowTime;
   }
 
   // Counter for Button 2
   if(button2State == HIGH){
     unsigned long nowTime = millis();
     if(nowTime - button2Pushedtime > coolTime){
-      visitorNum--;
-      client.write(visitorNum);
-      Serial.println("send %l", visitorNum);
-    }
+      visitorNum[1]++;
+
     button2Pushedtime = nowTime;
   }
+  }
+  client.write(visitorNum, sizeof(visitorNum));
+  Serial.println("Data sent");
+  delay(5000);
+  
 /*
   // Counter for Exit Button 1
   if(exitbutton1State != previousexitbutton1State){
