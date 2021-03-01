@@ -14,8 +14,8 @@ int input = Serial.read();
 // Connect to wifi and server
 byte serverIP[] = { 180, 235, 234, 95 };
 int serverPort = 9005;
-char ssid[] = "Annchewce3-TIME2.4Ghz";       // My WiFi SSID
-char pass[] = "4QaPz5HC9";   // My WiFi Password
+char ssid[] = "z";       
+char pass[] = "";   
 char Header[] = { 0x1, 0x3, 'S', 'I', 'T',};
 WiFiClient client;
 
@@ -64,45 +64,14 @@ void loop() {
   buttonStates[0] = digitalRead(buttonPins[0]);
   buttonStates[1] = digitalRead(buttonPins[1]);
 
-  // Counter for Entrance Button 
-  if(buttonStates[0] != previous_buttonState[0]){
-    if(buttonStates[0] == HIGH){
-      pushCounters[0]++;
-      }
-     input = 'A';
-    }
-
-  // Counter for Exit Button 
-  if(buttonStates[1] != previous_buttonState[1]){
-    if(buttonStates[1] == HIGH){
-      pushCounters[1]++;
-      }
-     input = 'A';
-    }
-
-  /*/ Counter for Exit Button 1
-  if( != ){
-    if( == HIGH){
-      ++;
-      }
-     input = 'A';
-    }
-    
-  // Counter for Exit Button 2
-  if( != ){
-    if( == HIGH){
-      ++;
-      }
-     input = 'A';
-    }*/
-   
+  counter();
   delay(1000);
+  
   if(input == 'A'){
     display();
     sendtoserver();
   }
 }
-
 
 void display(){
   Serial.print(String(pushCounters[0])+"\t"+String(pushCounters[1]));
@@ -111,4 +80,18 @@ void display(){
 
 void sendtoserver(){
   client.write(pushCounters, sizeof(pushCounters));
+  //client.write(pushCounters[]);
+  //client.write(exitbutton1Pushcounter);
+  //client.write(exitbutton2Pushcounter);
+  }
+
+int counter(){
+  // For loop records pushes for each button
+  for(int i=0; i<=2; i++){
+    if(buttonStates[i] != previous_buttonState[i]){
+      if(buttonStates[i] == HIGH){
+        pushCounters[i]++;
+      }
+    input = 'A';
+    }
   }
