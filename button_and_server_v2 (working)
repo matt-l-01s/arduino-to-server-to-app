@@ -3,24 +3,12 @@
 #include <WiFiClient.h>
 
 // Constant Variables
-const int button1Pin = 34;
-const int button2Pin = 35;
-//const int exitbutton1Pin = 32;
-//const int exitbutton2Pin = 33;
+const int buttonPins[2] = {34, 35};
 
 // Changing Variables
-byte pushCounters[] = {0,0};
-
-int button1State = 0;
-int button2State = 0;
-//int exitbutton1State = 0;
-//int exitbutton2State = 0;
-
-int previousbutton1State = 0;
-int previousbutton2State = 0;
-//int previousexitbutton1State = 0;
-//int previousexitbutton2State = 0;
-
+byte pushCounters[2] = {0,0};
+int buttonStates[2] = {0,0};
+int previous_buttonState[2] = {0,0};
 int input = Serial.read();
 
 // Connect to wifi and server
@@ -32,14 +20,9 @@ char Header[] = { 0x1, 0x3, 'S', 'I', 'T',};
 WiFiClient client;
 
 void setup() {
-  // put your setup code here, to run once:
-
-  // Setting pins as input
-  pinMode(button1Pin, INPUT);
-  pinMode(button2Pin, INPUT);
-  //pinMode(exitbutton1Pin, INPUT);
-  //pinMode(exitbutton2Pin, INPUT);
-
+  // Setting pins as input and starting the serial monitor
+  pinMode(buttonPins[0], INPUT);
+  pinMode(buttonPins[1], INPUT);
   Serial.begin(115200); // Baud Rate 115200
 
   // Connecting to WiFi
@@ -78,45 +61,42 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  button1State = digitalRead(button1Pin);
-  button2State = digitalRead(button2Pin);
-  //exitbutton1State = digitalRead(exitbutton1Pin);
-  //exitbutton2State = digitalRead(exitbutton2Pin);
+  buttonStates[0] = digitalRead(buttonPins[0]);
+  buttonStates[1] = digitalRead(buttonPins[1]);
 
-  // Counter for Button 1
-  if(button1State != previousbutton1State){
-    if(button1State == HIGH){
+  // Counter for Entrance Button 
+  if(buttonStates[0] != previous_buttonState[0]){
+    if(buttonStates[0] == HIGH){
       pushCounters[0]++;
       }
      input = 'A';
     }
 
-  // Counter for Button 2
-  if(button2State != previousbutton2State){
-    if(button2State == HIGH){
+  // Counter for Exit Button 
+  if(buttonStates[1] != previous_buttonState[1]){
+    if(buttonStates[1] == HIGH){
       pushCounters[1]++;
       }
      input = 'A';
     }
 
   /*/ Counter for Exit Button 1
-  if(exitbutton1State != previousexitbutton1State){
-    if(exitbutton1State == HIGH){
-      exitbutton1Pushcounter++;
+  if( != ){
+    if( == HIGH){
+      ++;
       }
      input = 'A';
     }
     
   // Counter for Exit Button 2
-  if(exitbutton2State != previousexitbutton2State){
-    if(exitbutton2State == HIGH){
-      exitbutton2Pushcounter++;
+  if( != ){
+    if( == HIGH){
+      ++;
       }
      input = 'A';
     }*/
+   
   delay(1000);
-  
   if(input == 'A'){
     display();
     sendtoserver();
@@ -131,7 +111,4 @@ void display(){
 
 void sendtoserver(){
   client.write(pushCounters, sizeof(pushCounters));
-  //client.write(pushCounters[]);
-  //client.write(exitbutton1Pushcounter);
-  //client.write(exitbutton2Pushcounter);
   }
