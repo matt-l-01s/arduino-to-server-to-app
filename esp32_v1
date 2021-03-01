@@ -1,73 +1,50 @@
-// Constant Variables
-const int button1Pin = 34;
-const int button2Pin = 35;
-const int exitbutton1Pin = 32;
-const int exitbutton2Pin = 33;
+/// Constant Variables
+const int buttonPins[2] = {34, 35};
 
 // Changing Variables
-int button1Pushcounter = 0;
-int button2Pushcounter = 0;
-int exitbutton1Pushcounter = 0;
-int exitbutton2Pushcounter = 0;
-
-int button1State = 0;
-int button2State = 0;
-int exitbutton1State = 0;
-int exitbutton2State = 0;
-
-int previousbutton1State = 0;
-int previousbutton2State = 0;
-int previousexitbutton1State = 0;
-int previousexitbutton2State = 0;
+byte pushCounters[2] = {0,0};
+int buttonStates[2] = {0,0};
+int previous_buttonState[2] = {0,0};
+int input = Serial.read();
 
 void setup() {
   // put your setup code here, to run once:
 
   // Setting pins as input
-  pinMode(button1Pin, INPUT);
-  pinMode(button2Pin, INPUT);
-  pinMode(exitbutton1Pin, INPUT);
-  pinMode(exitbutton2Pin, INPUT);
+  pinMode(buttonPins[0], INPUT);
+  pinMode(buttonPins[1], INPUT);
 
+  Serial.print("Visitors in \t Visitors out");
   Serial.begin(115200); // Baud Rate 115200
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  button1State = digitalRead(button1Pin);
-  button2State = digitalRead(button2Pin);
-  exitbutton1State = digitalRead(exitbutton1Pin);
-  exitbutton2State = digitalRead(exitbutton2Pin);
+  buttonStates[0] = digitalRead(buttonPins[0]);
+  buttonStates[1] = digitalRead(buttonPins[1]);
 
-  // Counter for Button 1
-  if(button1State != previousbutton1State){
-    if(button1State == HIGH){
-      button1Pushcounter++;
-      }  
-    }
-
-  // Counter for Button 2
-  if(button2State != previousbutton2State){
-    if(button2State == HIGH){
-      button2Pushcounter++;
-      }
-    }
-
-  // Counter for Exit Button 1
-  if(exitbutton1State != previousexitbutton1State){
-    if(exitbutton1State == HIGH){
-      exitbutton1Pushcounter++;
-      }
-    }
-    
-  // Counter for Exit Button 2
-  if(exitbutton2State != previousexitbutton2State){
-    if(exitbutton2State == HIGH){
-      exitbutton2Pushcounter++;
-      }
-    }
-
+  counter();  
+  if(input == 'A'){
+  display();
   }
   delay(500);
 }
 
+
+void display(){
+  Serial.print(String(pushCounters[0])+"\t"+String(pushCounters[1]));
+  Serial.println();
+  }
+
+int counter(){
+  // For loop records pushes for each button
+  for(int i=0; i<=2; i++){
+    if(buttonStates[i] != previous_buttonState[i]){
+      if(buttonStates[i] == HIGH){
+        pushCounters[i]++;
+      }
+    input = 'A';
+    }
+  }
+  return input;  
+  }
