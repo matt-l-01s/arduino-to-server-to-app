@@ -19,7 +19,7 @@ char Header[] = { 0x1, 0x3, 'S', 'I', 'T',};
 
 byte packet[PACKET_SIZE] = {0X0, 0X0, 0X0, 0x0, 0x0, 0x0};
 
-const unsigned long cool_time = 1000;
+const unsigned long cool_time = 5000;
 volatile bool sending_flag = false;
 volatile unsigned long enter_num = 0;
 volatile unsigned time_pushed_EnterButton = 0;
