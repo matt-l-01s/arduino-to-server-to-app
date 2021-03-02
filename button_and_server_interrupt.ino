@@ -30,6 +30,7 @@ volatile unsigned time_pushed_ExitButton = 0;
 
 
 //It is called when button is just released at the entrance.
+//if you use ESP8266, replace "void IRAM_ATTR offEnterButton()" with "ICACHE_RAM_ATTR void offEnterButton()"
 void IRAM_ATTR offEnterButton(){
   unsigned long now_time = millis();
   if(now_time - time_pushed_EnterButton > cool_time){
@@ -44,6 +45,7 @@ void IRAM_ATTR offEnterButton(){
 }
 
 //It is called when button is just released at the exit.
+//if you use ESP8266, replace "void IRAM_ATTR offExitButton()" with "ICACHE_RAM_ATTR void offExitButton()"
 void IRAM_ATTR offExitButton(){
   unsigned long now_time = millis();
   if(now_time - time_pushed_ExitButton > cool_time){
