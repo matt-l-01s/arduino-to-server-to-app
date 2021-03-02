@@ -3,6 +3,8 @@
 #include <SPI.h>
 
 #define PACKET_SIZE 6
+//ESP8266 has not PIN 34 and 35.
+//Define the pin number corresponding to the input.
 #define ENTER_BUTTON_PIN 34
 #define EXIT_BUTTON_PIN 35
 
@@ -12,7 +14,7 @@ char ssid[] = "your network SSID here";          //  your network SSID (name)l-d
 char pass[] = "your network password here";   // your network password
 
 //send it when ESP32 first connect to the server.
-char Header[] = { 0x1, 0x3, 'S', 'I', 'T',};
+char Header[] = { 0x1, 0x3, 'S', 'I', 'T'};
 
 //The first three bytes are the number of button pushed at the entrance.
 //The last three bytes are the number of button pushed at the exit.
@@ -107,6 +109,7 @@ void setup() {
     client.connect(serverIP, serverPort);
     delay(5000);
     Serial.print(".");
+  }
   if( !client.connected()) {
     Serial.println("Couldn't get a Server connection");
     return;
