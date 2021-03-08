@@ -17,5 +17,11 @@ Main Points for Presentation
   The server converts the data into a geojson file, along with the geographic data of the location
   The Android App receives the json file from the server and displays the data.
   
+3. What we achieved
+  We created the Arduino circuit with no issues
+  We created Arduino code with interrupts so that button debouncing does not occur
+  We created the Android App that displays our data to end users
+  We successfully sent 6 bytes of data from our ESPs to the python server
+  
 3. Demo Video
   
