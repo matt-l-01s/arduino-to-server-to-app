@@ -1,3 +1,4 @@
+
 import time
 import threading
 import socket
@@ -16,9 +17,10 @@ class Sender:
     def __init__(self):
         json_node = open("json_data.json", "r")
         Sender.JSON_DATA = json.load(json_node)
-    
+        print("Sender Init")
 
     def _make_json(self):
+        print("make json")
         new_data = Receiver.CONTABLE.copy()
         for feature in Sender.JSON_DATA["features"]:
             num = new_data.get(feature["properties"]["name"])
@@ -28,19 +30,19 @@ class Sender:
         Sender.JSON_DATA["metadata"]["count"] = i
         fp = open("json_data.json", "w")
         json.dump(Sender.JSON_DATA, fp)
-        
+        print("write json")
 
     def _sendJson(self, conn):
         self._make_json()
         json_str = json.dumps(Sender.JSON_DATA)
         conn.sendall( json_str.encode("utf-8"))
+        print("send json")
 
     def _parse(self, conn):
         data = conn.recv(1024)
         print("receive : ", data)
         self._sendJson(conn)
         conn.close()
-
 
     def start(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -58,16 +60,14 @@ class Receiver:
     RECEIVE_PORT = 9005
     CONTABLE = {}
     def __init__(self):
-        print("RelayServer Init")
+        print("Receiver Init")
         #self._thtable  = {}
-
 
     def _show(self, buffer):
         for b in buffer:
             print("{:02x}".format(b), end=" ")
         print()
 
-    
     def _receiving(self, ch_name, s_conn):
         ch = Receiver.CONTABLE.get(ch_name)
         while ch:
@@ -85,7 +85,6 @@ class Receiver:
                 IN = (buf[0] << 16) + (buf[1] << 8) + buf[2]
                 OUT = (buf[3] << 16) + (buf[4] << 8) + buf[5]
             Receiver.CONTABLE[ch_name] = IN - OUT
-
 
     def _parse(self, conn):
         data = conn.recv(1024)
@@ -108,11 +107,6 @@ class Receiver:
         th = threading.Thread(target=self._receiving, args=(channel_name, conn), daemon=True)
         th.setDaemon(True)
         th.start()
-        
-
-
-        
-
 
 
     def start(self):
