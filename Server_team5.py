@@ -153,6 +153,6 @@ if __name__ == "__main__":
     receiver = Receiver()
     sender = Sender()
     Sender_th = threading.Thread(target=sender.start, daemon=True)
-    Receiver_th = threading.Thread(target=receiver.start, daemon=True)
+    receiver.start()
     #sender = Sender()
     #print(Sender.JSON_DATA)
