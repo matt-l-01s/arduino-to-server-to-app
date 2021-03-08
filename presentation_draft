@@ -1,0 +1,27 @@
+Main Points for Presentation
+
+1. Objectives, Themes and Challenges Faced
+  Our system is a visitor monitoring system that can be used for security purposes.
+  The system records visitors entering and leaving by recording a button press. 1 for entrance, 1 for exit.
+  This system can control the number of visitors in a place on a certain day.
+  This system can also determine number of visitors on a day.
+  It also shows an alert if too many people are in 1 place
+  The main theme of this project is COVID-19 and security.
+  
+  Some of the challenges we faced are balancing working together on the project with our classes and connecting the ESP and Android app to the server.
+
+2. How it works
+  Visitor pushes a button at entrance or exit
+  Button presses are recorded by ESP every second
+  ESP sends the button presses to a Python HTTP server every 10 seconds
+  The server converts the data into a geojson file, along with the geographic data of the location
+  The Android App receives the json file from the server and displays the data.
+  
+3. What we achieved
+  We created the Arduino circuit with no issues
+  We created Arduino code with interrupts so that button debouncing does not occur
+  We created the Android App that displays our data to end users
+  We successfully sent 6 bytes of data from our ESPs to the python server
+  
+3. Demo Video
+  
