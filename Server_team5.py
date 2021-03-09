@@ -90,7 +90,7 @@ class Receiver:
             IN = int.from_bytes(data[0:3], "big") #int.from_bytes(data[0:3])
             OUT = int.from_bytes(data[3:6], "big") #int.from_bytes(data[3:6])
             Receiver.CONTABLE[ch_name] = IN - OUT
-            print(ch, ":", data , "to", IN - OUT)
+            print(ch_name, ":", data , "to", IN - OUT)
 
     def _parse(self, conn):
         data = conn.recv(1024)
