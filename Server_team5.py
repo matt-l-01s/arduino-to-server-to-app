@@ -61,38 +61,45 @@ class Receiver:
     def __init__(self):
         print("Receiver Init")
         #self._thtable  = {}
-
+    """
     def _show(self, buffer):
         for b in buffer:
             print("{:02x}".format(b), end=" ")
         print()
-
+    """
     def _receiving(self, ch_name, s_conn):
         ch = Receiver.CONTABLE.get(ch_name)
-        while ch:
+        print(ch_name , "start receiving")
+        while ch != None:
             #s_conn = channel.get_conn()
-            if s_conn:
-                data = s_conn.recv(6)
-                buf = [6]
-                i = 0
-                for byte in data:
-                    if i>=6 :
-                        print("unmatch data received")
-                        break
-                    buf[i] = int.from_bytes(byte)
-                    i+=1
-                IN = (buf[0] << 16) + (buf[1] << 8) + buf[2]
-                OUT = (buf[3] << 16) + (buf[4] << 8) + buf[5]
+            data = s_conn.recv(128)
+            #data_bytes = data[0 : 6].decode('ascii')
+            #buf = [6]
+            """
+            i = 0
+            for byte in data:
+                if i>=6 :
+                    print("unmatch data received")
+                    break
+                buf[i] = int.from_bytes(byte)
+                i+=1
+            
+            IN = (buf[0] << 16) + (buf[1] << 8) + buf[2]
+            OUT = (buf[3] << 16) + (buf[4] << 8) + buf[5]
+            """
+            IN = int.from_bytes(data[0:3], "big") #int.from_bytes(data[0:3])
+            OUT = int.from_bytes(data[3:6], "big") #int.from_bytes(data[3:6])
             Receiver.CONTABLE[ch_name] = IN - OUT
+            print(ch, ":", data , "to", IN - OUT)
 
     def _parse(self, conn):
         data = conn.recv(1024)
         #print(len(data))
         #print(type(data))
-        self._show(data)
+        print("receive ",data)
 
         nlen = data[1]
-        channel_name = data[2 : nlen+2].decode('ascii')
+        channel_name = data[2 : nlen+2].decode("utf-8")
 
         #print("name={}".format(channel_name))
         _new_channel = False
