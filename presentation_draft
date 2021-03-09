@@ -23,5 +23,19 @@ Main Points for Presentation
   We created the Android App that displays our data to end users
   We successfully sent 6 bytes of data from our ESPs to the python server
   
-3. Demo Video
+4. Strategy and challenges
+  Strategy
+    We divided work based on eveyone's skills
+    Then, we helped each other with sending and receiving data.
+  
+  Challenges
+    Most members had classes to attend throughout the project duration
+      We held meetings when everyone was free. If only a few people attended, we did work and briefed our teammates that didn't come.
+    The data sent to the server was not in the format we wanted
+      We changed the button presses to byte form so that the maximum number that can be recorded is larger.
+      We converted the data sent to server to JSON so it can be used by the App
+    
+5. Demo Video
+    In the video, when the button is pressed on the ESP, the server receives the data, grouped based on the header. The server can accept data from multiple ESPs.
+    Every 5 minutes, the app requests a json file from the server, which updates the values in the app.
   
