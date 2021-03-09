@@ -15,13 +15,12 @@ class Sender:
     JSON_DATA = {}
 
     def __init__(self):
-        json_node = open("json_data.json", "r")
-        Sender.JSON_DATA = json.load(json_node)
         print("Sender Init")
 
     def _make_json(self):
         print("make json")
         new_data = Receiver.CONTABLE.copy()
+        i = 0
         for feature in Sender.JSON_DATA["features"]:
             num = new_data.get(feature["properties"]["name"])
             if(num != None):
@@ -46,8 +45,8 @@ class Sender:
 
     def start(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.bind((Sender.ADDR, Sender.SENDER_PORT))
-            s.listen(1)
+            s.bind((Sender.ADDR, self.SENDER_PORT))
+            s.listen(10)
             while True:
                 conn, addr = s.accept()
                 self._parse(conn)
@@ -75,7 +74,7 @@ class Receiver:
             if s_conn:
                 data = s_conn.recv(6)
                 buf = [6]
-                i=0
+                i = 0
                 for byte in data:
                     if i>=6 :
                         print("unmatch data received")
@@ -112,7 +111,7 @@ class Receiver:
     def start(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind((Receiver.ADDR, self.RECEIVE_PORT))
-            s.listen(1)
+            s.listen(10)
             while True:
                 conn, addr = s.accept()
                 self._parse(conn)
@@ -128,7 +127,8 @@ class Receiver:
 
 if __name__ == "__main__":
     print("relay server")
-    
+    json_node = open("json_data.json", "r")
+    Sender.JSON_DATA = json.load(json_node)
     """
     json_str = json.dumps(json)
     rserver1 = RelayServer(9005)
@@ -147,6 +147,7 @@ if __name__ == "__main__":
     receiver = Receiver()
     sender = Sender()
     Sender_th = threading.Thread(target=sender.start, daemon=True)
+    Sender_th.start()
     receiver.start()
     #sender = Sender()
     #print(Sender.JSON_DATA)
