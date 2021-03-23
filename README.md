@@ -1,8 +1,5 @@
 # arduino-to-server-to-app
-
-Created by matt-l-01s, 5jikinoko and davidyu1012-roc.
-
-This code was for a project from 20/2/21 to 9/3/21.
+This repository was made for a global project based learning (gpbl) programme from 20/2/21 to 9/3/21. Thus, there will be no more updates to this repository.
 
 The final version of the arduino code can be found at button_and_server_interrupt.ino
 
